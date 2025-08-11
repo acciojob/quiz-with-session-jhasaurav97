@@ -36,26 +36,26 @@ let userAnswers = JSON.parse(sessionStorage.getItem("progress")) || [];
 
 // ✅ Display the quiz
 function renderQuestions() {
-  questionsElement.innerHTML = ""; // clear previous
+  questionsElement.innerHTML = "";
   questions.forEach((q, i) => {
     const questionDiv = document.createElement("div");
     const questionText = document.createElement("p");
     questionText.textContent = q.question;
     questionDiv.appendChild(questionText);
 
-    q.choices.forEach((choice) => {
+    q.choices.forEach(choice => {
       const label = document.createElement("label");
       const input = document.createElement("input");
       input.type = "radio";
       input.name = `question-${i}`;
       input.value = choice;
 
-      // restore selection if saved in sessionStorage
+      // Restore checked state with HTML attribute (for Cypress)
       if (userAnswers[i] === choice) {
-        input.checked = true;
+        input.setAttribute("checked", "true");
       }
 
-      // Save progress when option is selected
+      // Save to session storage when clicked
       input.addEventListener("change", () => {
         userAnswers[i] = choice;
         sessionStorage.setItem("progress", JSON.stringify(userAnswers));
@@ -69,6 +69,7 @@ function renderQuestions() {
     questionsElement.appendChild(questionDiv);
   });
 }
+
 
 // ✅ Calculate score
 function calculateScore() {
